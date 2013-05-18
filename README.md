@@ -22,6 +22,10 @@ Open `Options` to specify `hosname` (default to `localhost`) and `port` (default
 
 By now it's quite rough. You may fork to help.
 
+### Bugs
+
+After changing options, this extension may break. Dont't know why it happens yet.
+
 ### Images
 
 Icons from: http://www.iconfinder.com/search/?q=d

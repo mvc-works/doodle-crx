@@ -9,6 +9,11 @@
     "48": "img/d-on.png"
   },
   "options_page": "build/options.html",
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ],
   "browser_action": {
     "default_icon": "img/d-on.png"
   }
