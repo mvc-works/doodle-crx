@@ -7,8 +7,8 @@ global =
   ws: undefined
   status: on
 
-config = {}
 try config = localStorage.getItem("config")
+config ?= {}
 if config.hostname? then global.hostname = config.hostname
 if config.port? then global.port = config.port
 
