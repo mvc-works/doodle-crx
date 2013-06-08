@@ -13,7 +13,7 @@ window.onload = ->
 
   q("#hostname").value = config.hostname
   q("#port").value = config.port
-  q("#filter").value = config.filter
+  q("#filter").value = config.filter or ''
 
   window.onbeforeunload = ->
     hostname = q("#hostname").value
