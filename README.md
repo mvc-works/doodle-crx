@@ -20,6 +20,9 @@ http://stackoverflow.com/questions/15575030/chrome-extension-send-message-from-b
 Install it in developer mode. And use it togather with [`doodle`][doodle].  
 Open `Options` to specify `hosname` (default to `localhost`) and `port` (default to `7776`).  
 
+Also in `Options` you may specify a string as a filter of URLs.  
+Just notice that the filter is implemented by `.indexOf`.
+
 By now it's quite rough. You may fork to help.
 
 ### Bugs
