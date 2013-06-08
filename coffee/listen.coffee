@@ -7,10 +7,11 @@ global =
   ws: undefined
   status: on
 
-try config = localStorage.getItem("config")
+try config = JSON.parse localStorage.getItem("config")
 config ?= {}
 if config.hostname? then global.hostname = config.hostname
 if config.port? then global.port = config.port
+if config.filter? then global.filter = config.filter
 
 connect = ->
   h = global.hostname
@@ -26,19 +27,21 @@ connect = ->
         do reload
 
   global.ws.onclose = ->
-    global.ws = undefined
+    global.ws = null
     console.log 'closed'
 
 reload = ->
   if global.status is on
     chrome.tabs.getSelected (tab) ->
+      if tab.url.indexOf(global.filter) < 0 then return
       chrome.tabs.reload tab.id
       # console.log tab.id
 
 do reconnect = ->
   if global.status is on
-    if (not global.ws) then connect()
-  console.log "trying..."
+    if (not global.ws)
+      connect()
+      console.log "connecting..."
   delay 4000, reconnect
 
 chrome.browserAction.onClicked.addListener (tab) ->
