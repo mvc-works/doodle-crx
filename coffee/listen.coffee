@@ -1,5 +1,13 @@
 
+# helper function
+
+born = (baby, keys, model) ->
+  keys.map (key) -> baby[key] = model[key] if model[key]
+  baby
+
 # init data here
+
+configKeys = 'hostname port target'.split ' '
 
 global =
   hostname: "localhost"
@@ -10,9 +18,8 @@ global =
 
 try config = JSON.parse localStorage.getItem("config")
 config ?= {}
-if config.hostname? then global.hostname = config.hostname
-if config.port? then global.port = config.port
-if config.target? then global.target = config.target
+
+global = born global, configKeys, config
 
 # way to reload
 
@@ -82,11 +89,8 @@ chrome.browserAction.onClicked.addListener (tab) ->
     do connect
 
 chrome.extension.onRequest.addListener (req, sender, res) ->
-  {hostname, port} = req.update
-  global.hostname = hostname
-  global.port = port
-
   global.ws?.close()
+  global = born global, configKeys, req.update
 
 # start script
 

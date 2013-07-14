@@ -27,7 +27,7 @@ window.onload = ->
     localStorage.setItem("config", JSON.stringify config)
 
     data =
-      update: {hostname, port}
+      update: {hostname, port, target}
 
     chrome.extension.sendRequest data, (ret) ->
       console.log ret
