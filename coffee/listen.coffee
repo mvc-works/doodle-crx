@@ -1,58 +1,81 @@
 
-delay = (t, f) -> setTimeout f, t
+# init data here
 
 global =
   hostname: "localhost"
   port: 7776
   ws: undefined
   status: on
+  target: 'localhost'
 
 try config = JSON.parse localStorage.getItem("config")
 config ?= {}
 if config.hostname? then global.hostname = config.hostname
 if config.port? then global.port = config.port
-if config.filter? then global.filter = config.filter
+if config.target? then global.target = config.target
 
-connect = ->
+# way to reload
+
+time = -> (new Date).getTime()
+lastTime = time()
+
+reload = ->
+  if (time() - lastTime) > 1000
+    lastTime = time()
+    if global.status is on
+      chrome.tabs.getSelected (tab) ->
+        console.info 'reload', global.target
+        if global.target? and tab.url.indexOf(global.target) >= 0
+          chrome.tabs.reload tab.id
+    else
+      console.info 'status is off, will not reload'
+  else
+    console.warn 'too frequent, not reload'
+
+# way to open websocket
+
+openSocket = ->
   h = global.hostname
   p = global.port
-  console.log global
   global.ws = new WebSocket "ws://#{h}:#{p}"
 
   global.ws.onmessage = (message) ->
-    # console.log 'message'
-    if (global.status is on)
-      if message.data is 'reload'
-        # console.log 'reload event'
-        do reload
+    if global.status
+      do reload # if message.data is 'reload'
+    else
+      console.info 'disabled in status'
 
   global.ws.onclose = ->
-    global.ws = null
-    console.log 'closed'
+    delete global.ws.onclose
+    delete global.ws
+    # console.clear()
+    console.log 'connection closed, calling connect'
+    do connect
 
-reload = ->
-  if global.status is on
-    chrome.tabs.getSelected (tab) ->
-      if tab.url.indexOf(global.filter) < 0 then return
-      chrome.tabs.reload tab.id
-      # console.log tab.id
+  global.ws.onopen = -> console.info 'connection established'
 
-do reconnect = ->
+connect = ->
   if global.status is on
-    if (not global.ws)
-      connect()
+    if global.ws
+      console.info 'connected'
+    else
       console.log "connecting..."
-  delay 4000, reconnect
+      setTimeout openSocket, 1000
+
+# chrome listeners
 
 chrome.browserAction.onClicked.addListener (tab) ->
-  console.log tab
 
   if global.status is on
+    console.info 'status disabled'
+    global.ws.close()
     chrome.browserAction.setIcon path: "img/d-off.png"
     global.status = off
   else
     chrome.browserAction.setIcon path: "img/d-on.png"
     global.status = on
+    console.info 'status enabled, will call connect'
+    do connect
 
 chrome.extension.onRequest.addListener (req, sender, res) ->
   {hostname, port} = req.update
@@ -60,3 +83,11 @@ chrome.extension.onRequest.addListener (req, sender, res) ->
   global.port = port
 
   global.ws?.close()
+
+# start script
+
+chrome.browserAction.setIcon path: "img/d-on.png"
+console.clear()
+console.log 'starting data:', global
+
+do connect

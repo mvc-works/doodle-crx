@@ -1,4 +1,6 @@
 
 require("calabash").do "doodle crx",
-  "coffee -o lib/ -wbc coffee/"
+  'pkill -f doodle'
+  "coffee -o lib/ -wbcm coffee/"
   "jade -o build/ -wP layout/options.jade"
+  'doodle build/ lib/ log:yes'

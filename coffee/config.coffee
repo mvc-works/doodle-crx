@@ -13,16 +13,16 @@ window.onload = ->
 
   q("#hostname").value = config.hostname
   q("#port").value = config.port
-  q("#filter").value = config.filter or ''
+  q("#target").value = config.target or ''
 
   window.onbeforeunload = ->
     hostname = q("#hostname").value
     port = parseInt q("#port").value
-    filter = q("#filter").value
+    target = q("#target").value
 
     if hostname?.length >= 4 then config.hostname = hostname
     if (typeof port is "number") then config.port = port
-    config.filter = filter
+    config.target = target
 
     localStorage.setItem("config", JSON.stringify config)
 
