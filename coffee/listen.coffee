@@ -20,6 +20,7 @@ try config = JSON.parse localStorage.getItem("config")
 config ?= {}
 
 global = born global, configKeys, config
+failedTimes = 0
 
 # way to reload
 
@@ -60,17 +61,23 @@ openSocket = ->
     delete global.ws.onclose
     delete global.ws
     # console.clear()
-    console.log 'connection closed, calling connect'
-    do connect
+    console.log 'connection closed, calling connect', failedTimes
+    if failedTimes < 10
+      do connect
+    else
+      console.warn 'failedTimes > 10'
+      chrome.browserAction.setIcon path: "img/d-off.png"
+      global.status = off
 
-  global.ws.onopen = -> console.info 'connection established'
+  global.ws.onopen = ->
+    console.info 'connected'
+    failedTimes = 0
 
 connect = ->
   if global.status is on
-    if global.ws
-      console.info 'connected'
-    else
+    unless global.ws?
       console.log "connecting..."
+      failedTimes += 1
       setTimeout openSocket, 1000
 
 # chrome listeners
@@ -79,7 +86,7 @@ chrome.browserAction.onClicked.addListener (tab) ->
 
   if global.status is on
     console.info 'status disabled'
-    global.ws.close()
+    global.ws?.close()
     chrome.browserAction.setIcon path: "img/d-off.png"
     global.status = off
   else
