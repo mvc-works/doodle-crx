@@ -20,13 +20,17 @@ time = -> (new Date).getTime()
 lastTime = time()
 
 reload = ->
-  if (time() - lastTime) > 1000
-    lastTime = time()
+  newTime = time()
+  if (newTime - lastTime) > 1000
+    lastTime = newTime
     if global.status is on
-      chrome.tabs.getSelected (tab) ->
-        console.info 'reload', global.target
-        if global.target? and tab.url.indexOf(global.target) >= 0
-          chrome.tabs.reload tab.id
+      console.log 'target', global.target
+      chrome.tabs.query {}, (tabs) ->
+        tabs.map (tab) ->
+          ss = global.target
+          if ss? and (tab.url.indexOf(ss) > 0)
+            console.info 'reloading', tab.url
+            chrome.tabs.reload tab.id
     else
       console.info 'status is off, will not reload'
   else
