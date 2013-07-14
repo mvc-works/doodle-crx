@@ -1,6 +1,6 @@
 {
   "name": "doodle-crx",
-  "version": "2",
+  "version": "0.0.2",
   "manifest_version": 2,
   "background": {
     "scripts": ["lib/listen.js"]
