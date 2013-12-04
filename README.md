@@ -1,21 +1,29 @@
 
-doodle.crx a helper tool for doodle
+Chrome Extension for Doodle
 ------
+
+Extension for listening message from [Doodle][doodle] command line tool, and refresh a page.
+
+[doodle]: https://github.com/jiyinyiyong/doodle
+
+### Installation
+
+* Via WebStore [doodle-crx][doodle-crx]
+* Download the lastest code and load the extension manually in developer mode.
+
+[doodle-crx]: https://chrome.google.com/webstore/detail/doodle-crx/ibpfeagjdgnadgiibjhodaampkeldngl
 
 ### Usage
 
-This is a Chrome extension for [`doodle`][doodle].  
-SincAt fisrt `https://` connections blocked foreign scripts, I have to write an extension.  
-Now I found using extensions, doodle is better.  
+Click the badge to open `Options` and specify:
 
-You need to `git clone` and install in developer mode.
-[`doodle`][doodle] is required ifor watching file.  
-Open `Options` to specify `hosname` (default to `localhost`) and `port` (default to `7776`).  
+* `hosname` (default to `localhost`)
+* `port` (default to `7776`)
+* `filter` (use `.indexOf` to filter url and target tab)
 
-Also in `Options` you may specify a string as a filter of URLs.  
-Just notice that the filter is implemented by `.indexOf`.
+### Usage
 
-[doodle]: https://github.com/jiyinyiyong/doodle
+`https://` connections blocked foreign scripts, so we need an extension. And it's better.
 
 ### Techs behind this extension
 
