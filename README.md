@@ -8,20 +8,21 @@ Extension for listening message from [Doodle][doodle] command line tool, and ref
 
 ### Installation
 
-* Via WebStore [doodle-crx][doodle-crx]
+* Via Chrome WebStore, add [doodle-crx][doodle-crx] to Chrome
 * Download the lastest code and load the extension manually in developer mode.
 
 [doodle-crx]: https://chrome.google.com/webstore/detail/doodle-crx/ibpfeagjdgnadgiibjhodaampkeldngl
 
 ### Usage
 
-Click the badge to open `Options` and specify:
+Left click the badge toggle `on` and `off`. The connection will be closed after too many fails.
+Inspect the 'background page' if you want to see what goes wrong.
 
-* `hosname` (default to `localhost`)
+Right click the badge to open `Options` and specify:
+
+* `hostname` (default to `localhost`)
 * `port` (default to `7776`)
-* `filter` (use `.indexOf` to filter url and target tab)
-
-### Usage
+* `filter` (used by `.indexOf` to filter urls, and find the tab to reload)
 
 `https://` connections blocked foreign scripts, so we need an extension. And it's better.
 
